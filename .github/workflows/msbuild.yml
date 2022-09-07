@@ -43,7 +43,7 @@ jobs:
         $currentDir=$(($pwd).Path)
         mkdir msbuild
         Get-ChildItem -Path .\*.exe -Recurse -Force | Copy-Item -Destination $(Join-Path $currentDir 'msbuild') -ErrorAction Ignore
-        Compress-Archive -Path $(Join-Path $currentDir msbuild) -DestinationPath $(Join-Path $currentDir 'test.zip')
-        Get-ChildItem .\msbuild
+        Compress-Archive -Path $(Join-Path $currentDir msbuild) -DestinationPath $(Join-Path $currentDir 'msbuild.zip')
+        Get-ChildItem 
  
         
