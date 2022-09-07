@@ -38,10 +38,12 @@ jobs:
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
       
-    - name: show current dir list
+    - name: Zip the binary file
       run: |
-        Get-ChildItem -Depth 2
-        Get-Location
-        echo "{{env.GITHUB_WORKSPACE}}"\tt
+        $currentDir=$(($pwd).Path)
+        mkdir msbuild
+        Get-ChildItem -Path .\*.exe -Recurse -Force | Copy-Item -Destination $(Join-Path $currentDir 'msbuild') -ErrorAction Ignore
+        Compress-Archive -Path $(Join-Path $currentDir msbuild) -DestinationPath $(Join-Path $currentDir 'test.zip')
+        Get-ChildItem .\msbuild
  
         
