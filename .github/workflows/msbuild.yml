@@ -44,6 +44,7 @@ jobs:
         mkdir msbuild
         Get-ChildItem -Path .\*.exe -Recurse -Force | Copy-Item -Destination $(Join-Path $currentDir 'msbuild') -ErrorAction Ignore
         Compress-Archive -Path $(Join-Path $currentDir msbuild) -DestinationPath $(Join-Path $currentDir 'msbuild.zip')
-        Get-ChildItem 
+        Get-ChildItem -Path 2
+        Remove-Item $(Join-Path $currentDir msbuild) -Filter * -Recurse -ErrorAction Ignore
  
         
