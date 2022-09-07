@@ -40,7 +40,7 @@ jobs:
       
     - name: show current dir list
       run: |
-        Get-ChildItem
+        Get-ChildItem -Depth 2
         Get-Location
  
         
