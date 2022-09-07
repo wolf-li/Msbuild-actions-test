@@ -42,5 +42,6 @@ jobs:
       run: |
         Get-ChildItem -Depth 2
         Get-Location
+        echo ${{env.GITHUB_WORKSPACE}}\tt
  
         
