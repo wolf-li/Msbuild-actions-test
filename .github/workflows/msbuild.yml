@@ -41,7 +41,6 @@ jobs:
     - name: find msi file
       run: |
         Get-ChildItem -Path D:\ -Directory -Recurse devenv.exe
-        Get-ChildItem -Path C:\ -Directory -Recurse devenv.exe
         devenv.exe /?
     
       
