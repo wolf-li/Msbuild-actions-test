@@ -37,24 +37,12 @@ jobs:
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
-      
-    - name: Build AIP
-      uses: caphyon/advinst-github-action@v1.0
-      with:
-        advinst-version: '19.0'
-        advinst-license: ${{ secrets.DEPLOY_KEY }}
-        advinst-enable-automation: 'true'
-        aip-path: ${{ github.workspace }}\x64\Release\arhitect.aip
-        aip-build-name: DefaultBuild
-        aip-package-name: setup.msi
-        aip-output-dir:  ${{ github.workspace }}\setup
-        aip-commands: |
-          SetProperty FOO="foo"
-          SetVersion 1.2.0
     
     - name: find msi file
       run: |
-        Get-ChildItem -Path .\*.msi -Recurse -Force
+        Get-ChildItem -Path D:\ -Directory -Recurse devenv.exe
+        Get-ChildItem -Path C:\ -Directory -Recurse devenv.exe
+        devenv.exe /?
     
       
       
