@@ -38,32 +38,52 @@ jobs:
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
       
-    - name: Zip the binary file
-      run: |
-        $currentDir=$(($pwd).Path)
-        mkdir msbuild
-        Get-ChildItem -Path .\*.exe -Recurse -Force | Copy-Item -Destination $(Join-Path $currentDir 'msbuild') -ErrorAction Ignore
-        Compress-Archive -Path $(Join-Path $currentDir msbuild) -DestinationPath $(Join-Path $currentDir 'msbuild.zip')
-        Remove-Item $(Join-Path $currentDir msbuild) -Filter * -Recurse -ErrorAction Ignore
-        
-    - name: Create releas
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.DEPLOY_KEY }}
+    - name: Build AIP
+      uses: caphyon/advinst-github-action@v1.0
       with:
-        tag_name: v${{ github.run_number }}
-        release_name:  Release V${{ github.run_number }}  
+        advinst-version: '19.0'
+        advinst-license: ${{ secrets.DEPLOY_KEY }}
+        advinst-enable-automation: 'true'
+        aip-path: ${{ github.workspace }}\x64\Release\arhitect.aip
+        aip-build-name: DefaultBuild
+        aip-package-name: setup.msi
+        aip-output-dir:  ${{ github.workspace }}\setup
+        aip-commands: |
+          SetProperty FOO="foo"
+          SetVersion 1.2.0
     
-    - name: Upload to release
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.DEPLOY_KEY }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: msbuild.zip
-        asset_name: msbuild-v${{ github.run_number }}.zip
-        asset_content_type: application/zip
+    - name: find msi file
+      run: |
+        Get-ChildItem -Path .\*.msi -Recurse -Force
+    
+      
+      
+#     - name: Zip the binary file
+#       run: |
+#         $currentDir=$(($pwd).Path)
+#         mkdir msbuild
+#         Get-ChildItem -Path .\*.exe -Recurse -Force | Copy-Item -Destination $(Join-Path $currentDir 'msbuild') -ErrorAction Ignore
+#         Compress-Archive -Path $(Join-Path $currentDir msbuild) -DestinationPath $(Join-Path $currentDir 'msbuild.zip')
+#         Remove-Item $(Join-Path $currentDir msbuild) -Filter * -Recurse -ErrorAction Ignore
+        
+#     - name: Create releas
+#       id: create_release
+#       uses: actions/create-release@v1
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.DEPLOY_KEY }}
+#       with:
+#         tag_name: v${{ github.run_number }}
+#         release_name:  Release V${{ github.run_number }}  
+    
+#     - name: Upload to release
+#       id: upload-release-asset
+#       uses: actions/upload-release-asset@v1
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.DEPLOY_KEY }}
+#       with:
+#         upload_url: ${{ steps.create_release.outputs.upload_url }}
+#         asset_path: msbuild.zip
+#         asset_name: msbuild-v${{ github.run_number }}.zip
+#         asset_content_type: application/zip
  
         
